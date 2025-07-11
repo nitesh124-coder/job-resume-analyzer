@@ -57,7 +57,7 @@ All dependencies are listed in `requirements.txt` with specific versions for com
 
 ```batch
 # Clone the repository
-git clone https://github.com/your-username/ResumeMatch.git
+https://github.com/nitesh124-coder/job-resume-analyzer
 cd ResumeMatch
 
 # Run the automated installer
@@ -68,7 +68,7 @@ install.bat
 
 #### 1. Clone the Repository
 ```batch
-git clone https://github.com/your-username/ResumeMatch.git
+https://github.com/nitesh124-coder/job-resume-analyzer
 cd ResumeMatch
 ```
 
@@ -213,77 +213,3 @@ pytest
 # Run tests with coverage
 pytest --cov=app --cov-report=html
 ```
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-## 📝 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 🆘 Troubleshooting
-
-### Common Issues
-
-#### NLTK Data Not Found
-```bash
-python -c "import nltk; nltk.download('punkt'); nltk.download('stopwords')"
-```
-
-#### Port Already in Use
-```batch
-# Change port in app.py or kill the process using the port
-netstat -ano | findstr :5000
-# Then kill the process ID shown
-taskkill /PID <process_id> /F
-```
-
-#### Virtual Environment Issues
-```batch
-# Recreate virtual environment
-rmdir /s venv
-python -m venv venv
-venv\Scripts\activate
-pip install -r requirements.txt
-```
-
-## 📞 Support
-
-For support, please:
-1. Check the [Issues](https://github.com/your-username/ResumeMatch/issues) page
-2. Create a new issue with detailed description
-3. Include error messages and system information
-
-## 🔄 Updates and Changelog
-
-### Version 2.0.0 (Current)
-- ✅ Enhanced web interface with modern design
-- ✅ Advanced skill extraction and categorization
-- ✅ Multi-format document support
-- ✅ Admin dashboard and user management
-- ✅ Improved security and error handling
-- ✅ Comprehensive testing suite
-
-### Version 1.0.0
-- ✅ Basic TF-IDF resume matching
-- ✅ Command-line interface
-- ✅ Simple text file processing
-
-## 🎯 Roadmap
-
-- [ ] Machine Learning model integration
-- [ ] Real-time job scraping
-- [ ] Email notifications
-- [ ] API endpoints
-- [ ] Mobile application
-- [ ] Advanced analytics dashboard
-- [ ] Integration with job boards
-
----
-
-**Made with ❤️ for job seekers and recruiters worldwide**
