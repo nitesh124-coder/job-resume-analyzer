@@ -1,0 +1,124 @@
+{% extends "admin_layout.html" %}
+
+{% block title %}System Logs{% endblock %}
+
+{% block content %}
+<div class="admin-header">
+    <div class="container">
+        <h1><i class="fas fa-list-alt"></i> System Logs</h1>
+        <p>View resume parser logs and system activities</p>
+    </div>
+</div>
+
+<div class="admin-card">
+    <h3><i class="fas fa-filter"></i> Filter Logs</h3>
+    <div style="display: flex; gap: 15px; margin-bottom: 20px; flex-wrap: wrap;">
+        <select id="filterLevel" style="padding: 10px; border: 1px solid var(--glass-border); border-radius: 8px;">
+            <option value="">All Levels</option>
+            <option value="info">Info</option>
+            <option value="warning">Warning</option>
+            <option value="error">Error</option>
+        </select>
+        <input type="date" id="filterDate" style="padding: 10px; border: 1px solid var(--glass-border); border-radius: 8px;">
+        <button onclick="clearLogs()" class="btn-admin btn-danger">
+            <i class="fas fa-trash"></i> Clear All Logs
+        </button>
+        <button onclick="exportLogs()" class="btn-admin btn-info">
+            <i class="fas fa-download"></i> Export Logs
+        </button>
+    </div>
+</div>
+
+<div class="admin-card">
+    <h3><i class="fas fa-list"></i> Recent Logs</h3>
+    <div class="admin-table">
+        <table id="logsTable">
+            <thead>
+                <tr>
+                    <th>Timestamp</th>
+                    <th>Level</th>
+                    <th>Action</th>
+                    <th>Details</th>
+                    <th>Admin</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for log in logs %}
+                <tr data-level="{{ log.level }}">
+                    <td>
+                        <div style="color: var(--text-color);">{{ log.timestamp }}</div>
+                    </td>
+                    <td>
+                        <span class="badge" style="background: {% if log.level == 'error' %}var(--admin-danger){% elif log.level == 'warning' %}var(--admin-warning){% else %}var(--admin-info){% endif %}; color: white; padding: 4px 8px; border-radius: 12px; font-size: 0.8rem; text-transform: uppercase;">
+                            {{ log.level }}
+                        </span>
+                    </td>
+                    <td>
+                        <div style="font-weight: 600; color: var(--text-color);">{{ log.action }}</div>
+                    </td>
+                    <td>
+                        <div style="color: var(--text-color);">{{ log.details }}</div>
+                    </td>
+                    <td>
+                        <div style="color: var(--text-color);">{{ log.admin }}</div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+// Filter functionality
+document.getElementById('filterLevel').addEventListener('change', function() {
+    const filterValue = this.value;
+    const rows = document.querySelectorAll('#logsTable tbody tr');
+    
+    rows.forEach(row => {
+        const level = row.dataset.level;
+        if (!filterValue || level === filterValue) {
+            row.style.display = '';
+        } else {
+            row.style.display = 'none';
+        }
+    });
+});
+
+function clearLogs() {
+    if (confirm('Clear all system logs? This action cannot be undone.')) {
+        fetch('/admin/logs/clear', {
+            method: 'POST'
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                location.reload();
+            } else {
+                alert(data.error || 'Error clearing logs');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error clearing logs');
+        });
+    }
+}
+
+function exportLogs() {
+    window.location.href = '/admin/logs/export';
+}
+</script>
+
+<style>
+@media (max-width: 768px) {
+    .admin-table {
+        overflow-x: auto;
+    }
+    
+    .admin-table table {
+        min-width: 800px;
+    }
+}
+</style>
+{% endblock %}

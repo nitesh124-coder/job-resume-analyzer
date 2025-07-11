@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhanced Resume Analysis - ResumeMatch</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .analysis-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .analysis-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .file-info {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .skills-section {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .skill-category {
+            margin-bottom: 20px;
+        }
+        
+        .skill-category h4 {
+            color: var(--primary-color);
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+        
+        .skill-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        
+        .skill-tag {
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+        
+        .job-matches {
+            display: grid;
+            gap: 20px;
+        }
+        
+        .job-match-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 15px;
+            padding: 25px;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .job-match-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--box-shadow-lg);
+        }
+        
+        .match-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+        
+        .job-info h3 {
+            color: var(--text-color);
+            margin-bottom: 5px;
+        }
+        
+        .company-name {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+        
+        .match-scores {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+        
+        .score-circle {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+            font-size: 0.9rem;
+        }
+        
+        .score-excellent { background: linear-gradient(135deg, #48bb78, #38a169); }
+        .score-good { background: linear-gradient(135deg, #4299e1, #3182ce); }
+        .score-fair { background: linear-gradient(135deg, #ed8936, #dd6b20); }
+        .score-poor { background: linear-gradient(135deg, #f56565, #e53e3e); }
+        
+        .skill-breakdown {
+            margin-top: 20px;
+        }
+        
+        .skill-match-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--glass-border);
+        }
+        
+        .skill-match-row:last-child {
+            border-bottom: none;
+        }
+        
+        .progress-bar {
+            width: 100px;
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            transition: width 0.3s ease;
+        }
+        
+        .missing-skills {
+            margin-top: 15px;
+            padding: 15px;
+            background: rgba(237, 137, 54, 0.1);
+            border-radius: 8px;
+            border-left: 4px solid var(--warning-color);
+        }
+        
+        .missing-skills h5 {
+            color: var(--warning-color);
+            margin-bottom: 10px;
+        }
+        
+        .missing-skill-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+        
+        .missing-skill-tag {
+            background: rgba(237, 137, 54, 0.2);
+            color: var(--warning-color);
+            padding: 4px 10px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+        }
+        
+        .top-matches {
+            margin-bottom: 40px;
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            color: var(--text-color);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(135deg, var(--secondary-color), var(--secondary-dark));
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: var(--transition);
+            margin-bottom: 30px;
+        }
+        
+        .back-button:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--box-shadow);
+            color: white;
+        }
+        
+        @media (max-width: 768px) {
+            .match-header {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .match-scores {
+                justify-content: center;
+            }
+            
+            .skill-match-row {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <a href="/" class="navbar-brand">ResumeMatch</a>
+            <div class="navbar-links">
+                <a href="/dashboard"><i class="fas fa-user-circle"></i> Dashboard</a>
+                <a href="/jobs"><i class="fas fa-briefcase"></i> Browse Jobs</a>
+                <a href="/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="analysis-container">
+        <a href="/dashboard" class="back-button">
+            <i class="fas fa-arrow-left"></i>
+            Back to Dashboard
+        </a>
+
+        <div class="analysis-header">
+            <h1><i class="fas fa-chart-line"></i> Enhanced Resume Analysis</h1>
+            <p>Comprehensive analysis of {{ resume_name }}</p>
+        </div>
+
+        <!-- File Information -->
+        <div class="file-info">
+            <h3><i class="fas fa-file-alt"></i> File Information</h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 15px;">
+                <div><strong>File:</strong> {{ file_info.file_path.split('/')[-1] if file_info.file_path else 'N/A' }}</div>
+                <div><strong>Size:</strong> {{ file_info.file_size or 'N/A' }}</div>
+                <div><strong>Type:</strong> {{ file_info.file_extension.upper() if file_info.file_extension else 'N/A' }}</div>
+                <div><strong>Status:</strong> 
+                    <span style="color: var(--success-color);">
+                        <i class="fas fa-check-circle"></i> Successfully Processed
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Skills Section -->
+        <div class="skills-section">
+            <h3><i class="fas fa-cogs"></i> Extracted Skills</h3>
+            {% for category, skills in resume_skills.items() %}
+                {% if skills %}
+                <div class="skill-category">
+                    <h4>{{ category }}</h4>
+                    <div class="skill-tags">
+                        {% for skill in skills %}
+                        <span class="skill-tag">{{ skill }}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+
+        <!-- Top Matches -->
+        <div class="top-matches">
+            <h2 class="section-title">
+                <i class="fas fa-trophy"></i>
+                Top Job Matches
+            </h2>
+            
+            <div class="job-matches">
+                {% for match in top_matches %}
+                <div class="job-match-card">
+                    <div class="match-header">
+                        <div class="job-info">
+                            <h3>{{ match.job_title }}</h3>
+                            <div class="company-name">{{ match.company }}</div>
+                        </div>
+                        <div class="match-scores">
+                            <div class="score-circle {% if match.overall_match >= 80 %}score-excellent{% elif match.overall_match >= 60 %}score-good{% elif match.overall_match >= 40 %}score-fair{% else %}score-poor{% endif %}">
+                                {{ "%.0f"|format(match.overall_match) }}%
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="skill-breakdown">
+                        <h5>Skill Match Breakdown:</h5>
+                        {% for category, details in match.skill_matches.items() %}
+                            {% if category != 'overall' and details.required > 0 %}
+                            <div class="skill-match-row">
+                                <span>{{ category }}</span>
+                                <div style="display: flex; align-items: center; gap: 10px;">
+                                    <span style="font-size: 0.9rem;">{{ details.matches }}/{{ details.required }}</span>
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" style="width: {{ details.percentage }}%"></div>
+                                    </div>
+                                    <span style="font-size: 0.9rem; font-weight: 600;">{{ "%.0f"|format(details.percentage) }}%</span>
+                                </div>
+                            </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    
+                    {% if match.missing_skills %}
+                    <div class="missing-skills">
+                        <h5><i class="fas fa-exclamation-triangle"></i> Skills to Improve</h5>
+                        <div class="missing-skill-tags">
+                            {% for category, skills in match.missing_skills.items() %}
+                                {% for skill in skills[:5] %}
+                                <span class="missing-skill-tag">{{ skill }}</span>
+                                {% endfor %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endif %}
+                    
+                    <div style="margin-top: 20px; text-align: center;">
+                        <a href="/job/{{ match.job.id }}" class="btn btn-primary">
+                            <i class="fas fa-eye"></i> View Job Details
+                        </a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- All Matches -->
+        {% if job_matches|length > 5 %}
+        <div>
+            <h2 class="section-title">
+                <i class="fas fa-list"></i>
+                All Job Matches ({{ job_matches|length }} total)
+            </h2>
+            
+            <div class="job-matches">
+                {% for match in job_matches[5:] %}
+                <div class="job-match-card">
+                    <div class="match-header">
+                        <div class="job-info">
+                            <h3>{{ match.job_title }}</h3>
+                            <div class="company-name">{{ match.company }}</div>
+                        </div>
+                        <div class="match-scores">
+                            <div class="score-circle {% if match.overall_match >= 80 %}score-excellent{% elif match.overall_match >= 60 %}score-good{% elif match.overall_match >= 40 %}score-fair{% else %}score-poor{% endif %}">
+                                {{ "%.0f"|format(match.overall_match) }}%
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="text-align: center; margin-top: 15px;">
+                        <a href="/job/{{ match.job.id }}" class="btn btn-outline">
+                            <i class="fas fa-eye"></i> View Details
+                        </a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 ResumeMatch. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>

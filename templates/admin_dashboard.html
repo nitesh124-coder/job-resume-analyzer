@@ -1,0 +1,186 @@
+{% extends "admin_layout.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="admin-header">
+    <div style="position: relative; z-index: 1;">
+        <h1 style="font-size: 2.5rem; font-weight: 800; margin-bottom: 10px; display: flex; align-items: center; gap: 15px;">
+            <i class="fas fa-tachometer-alt" style="font-size: 2rem;"></i>
+            Admin Dashboard
+        </h1>
+        <p style="font-size: 1.2rem; opacity: 0.9; margin: 0;">Welcome back, Administrator! Here's your system overview.</p>
+    </div>
+</div>
+
+<div class="admin-stats">
+    <div class="stat-card users">
+        <i class="fas fa-users"></i>
+        <div class="stat-number">{{ stats.total_users }}</div>
+        <div class="stat-label">Total Users</div>
+        <div style="margin-top: 10px; font-size: 0.85rem; color: rgba(255,255,255,0.7);">
+            <i class="fas fa-arrow-up" style="color: #38a169;"></i> Active accounts
+        </div>
+    </div>
+    <div class="stat-card resumes">
+        <i class="fas fa-file-alt"></i>
+        <div class="stat-number">{{ stats.total_resumes }}</div>
+        <div class="stat-label">Resumes Uploaded</div>
+        <div style="margin-top: 10px; font-size: 0.85rem; color: rgba(255,255,255,0.7);">
+            <i class="fas fa-chart-line" style="color: #38a169;"></i> Documents processed
+        </div>
+    </div>
+    <div class="stat-card jobs">
+        <i class="fas fa-briefcase"></i>
+        <div class="stat-number">{{ stats.total_jobs }}</div>
+        <div class="stat-label">Job Posts</div>
+        <div style="margin-top: 10px; font-size: 0.85rem; color: rgba(255,255,255,0.7);">
+            <i class="fas fa-plus-circle" style="color: #d69e2e;"></i> Available positions
+        </div>
+    </div>
+    <div class="stat-card applications">
+        <i class="fas fa-paper-plane"></i>
+        <div class="stat-number">{{ stats.total_applications }}</div>
+        <div class="stat-label">Applications</div>
+        <div style="margin-top: 10px; font-size: 0.85rem; color: rgba(255,255,255,0.7);">
+            <i class="fas fa-clock" style="color: #e53e3e;"></i> Pending review
+        </div>
+    </div>
+</div>
+
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 30px;">
+    <div class="admin-card">
+        <h3><i class="fas fa-chart-line"></i> Recent Activity</h3>
+        <div class="activity-list">
+            {% for activity in recent_activities %}
+            <div class="activity-item" style="display: flex; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--glass-border);">
+                <div class="activity-icon" style="width: 40px; height: 40px; border-radius: 50%; background: rgba(220, 53, 69, 0.1); display: flex; align-items: center; justify-content: center; margin-right: 15px;">
+                    <i class="{{ activity.icon }}" style="color: var(--admin-primary);"></i>
+                </div>
+                <div class="activity-content">
+                    <div style="font-weight: 600; color: var(--text-color);">{{ activity.action }}</div>
+                    <div style="font-size: 0.85rem; color: var(--text-light);">{{ activity.time }}</div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="admin-card">
+        <h3><i class="fas fa-exclamation-triangle"></i> System Alerts</h3>
+        <div class="alerts-list">
+            {% for alert in system_alerts %}
+            <div class="alert-item" style="padding: 12px; margin-bottom: 10px; border-radius: 8px; background: {% if alert.type == 'warning' %}rgba(255, 193, 7, 0.1){% elif alert.type == 'error' %}rgba(220, 53, 69, 0.1){% else %}rgba(23, 162, 184, 0.1){% endif %};">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <i class="fas {% if alert.type == 'warning' %}fa-exclamation-triangle{% elif alert.type == 'error' %}fa-times-circle{% else %}fa-info-circle{% endif %}" style="color: {% if alert.type == 'warning' %}var(--admin-warning){% elif alert.type == 'error' %}var(--admin-danger){% else %}var(--admin-info){% endif %};"></i>
+                    <div>
+                        <div style="font-weight: 600;">{{ alert.title }}</div>
+                        <div style="font-size: 0.9rem; color: var(--text-light);">{{ alert.message }}</div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<div class="admin-card">
+    <h3><i class="fas fa-users"></i> Recent User Registrations</h3>
+    <div class="admin-table">
+        <table>
+            <thead>
+                <tr>
+                    <th>Username</th>
+                    <th>Registration Date</th>
+                    <th>Resumes</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in recent_users %}
+                <tr>
+                    <td>
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <div style="width: 35px; height: 35px; border-radius: 50%; background: linear-gradient(135deg, var(--admin-primary), #c82333); display: flex; align-items: center; justify-content: center; color: white; font-weight: 600;">
+                                {{ user.username[0].upper() }}
+                            </div>
+                            {{ user.username }}
+                        </div>
+                    </td>
+                    <td>{{ user.registration_date or 'N/A' }}</td>
+                    <td>
+                        <span class="badge" style="background: var(--admin-info); color: white; padding: 4px 8px; border-radius: 12px; font-size: 0.8rem;">
+                            {{ user.resume_count }} resumes
+                        </span>
+                    </td>
+                    <td>
+                        <span class="badge" style="background: var(--admin-success); color: white; padding: 4px 8px; border-radius: 12px; font-size: 0.8rem;">
+                            Active
+                        </span>
+                    </td>
+                    <td>
+                        <a href="/admin/users/{{ user.username }}" class="btn-admin btn-info">View</a>
+                        <a href="/admin/users/{{ user.username }}/edit" class="btn-admin btn-warning">Edit</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
+    <div class="admin-card">
+        <h3><i class="fas fa-briefcase"></i> Job Categories</h3>
+        <div class="category-stats">
+            {% for category, count in job_categories.items() %}
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--glass-border);">
+                <span style="font-weight: 500;">{{ category }}</span>
+                <span class="badge" style="background: var(--admin-primary); color: white; padding: 4px 12px; border-radius: 12px; font-size: 0.85rem;">
+                    {{ count }} jobs
+                </span>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="admin-card">
+        <h3><i class="fas fa-chart-pie"></i> Quick Actions</h3>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+            <a href="/admin/jobs/add" class="btn-admin" style="text-align: center; padding: 15px; display: block;">
+                <i class="fas fa-plus"></i><br>Add New Job
+            </a>
+            <a href="/admin/users" class="btn-admin btn-info" style="text-align: center; padding: 15px; display: block;">
+                <i class="fas fa-users"></i><br>Manage Users
+            </a>
+            <a href="/admin/resumes" class="btn-admin btn-success" style="text-align: center; padding: 15px; display: block;">
+                <i class="fas fa-file-alt"></i><br>View Resumes
+            </a>
+            <a href="/admin/logs" class="btn-admin btn-warning" style="text-align: center; padding: 15px; display: block;">
+                <i class="fas fa-list-alt"></i><br>System Logs
+            </a>
+        </div>
+    </div>
+</div>
+
+<style>
+@media (max-width: 768px) {
+    .admin-stats {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    div[style*="grid-template-columns: 1fr 1fr"] {
+        grid-template-columns: 1fr !important;
+    }
+
+    .admin-table {
+        overflow-x: auto;
+    }
+
+    .admin-table table {
+        min-width: 600px;
+    }
+}
+</style>
+{% endblock %}

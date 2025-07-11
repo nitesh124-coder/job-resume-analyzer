@@ -1,0 +1,320 @@
+{% extends "admin_layout.html" %}
+
+{% block title %}Admin Settings{% endblock %}
+
+{% block content %}
+<div class="admin-header">
+    <div class="container">
+        <h1><i class="fas fa-cog"></i> Admin Settings</h1>
+        <p>Manage system settings and admin account preferences</p>
+    </div>
+</div>
+
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
+    <div class="admin-card">
+        <h3><i class="fas fa-key"></i> Change Admin Password</h3>
+        <form id="passwordForm">
+            <div style="margin-bottom: 20px;">
+                <label for="currentPassword" style="display: block; margin-bottom: 5px; font-weight: 600;">Current Password</label>
+                <input type="password" id="currentPassword" name="current_password" required style="width: 100%; padding: 10px; border: 1px solid var(--glass-border); border-radius: 8px;">
+            </div>
+            <div style="margin-bottom: 20px;">
+                <label for="newPassword" style="display: block; margin-bottom: 5px; font-weight: 600;">New Password</label>
+                <input type="password" id="newPassword" name="new_password" required style="width: 100%; padding: 10px; border: 1px solid var(--glass-border); border-radius: 8px;">
+            </div>
+            <div style="margin-bottom: 20px;">
+                <label for="confirmPassword" style="display: block; margin-bottom: 5px; font-weight: 600;">Confirm New Password</label>
+                <input type="password" id="confirmPassword" name="confirm_password" required style="width: 100%; padding: 10px; border: 1px solid var(--glass-border); border-radius: 8px;">
+            </div>
+            <button type="submit" class="btn-admin btn-success">
+                <i class="fas fa-save"></i> Update Password
+            </button>
+        </form>
+    </div>
+
+    <div class="admin-card">
+        <h3><i class="fas fa-sliders-h"></i> System Settings</h3>
+        <form id="systemForm">
+            <div style="margin-bottom: 20px;">
+                <label for="maxFileSize" style="display: block; margin-bottom: 5px; font-weight: 600;">Max Resume File Size (MB)</label>
+                <input type="number" id="maxFileSize" name="max_file_size" value="16" min="1" max="100" style="width: 100%; padding: 10px; border: 1px solid var(--glass-border); border-radius: 8px;">
+            </div>
+            <div style="margin-bottom: 20px;">
+                <label style="display: block; margin-bottom: 10px; font-weight: 600;">Allowed File Types</label>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                    <label style="display: flex; align-items: center; gap: 8px;">
+                        <input type="checkbox" name="allowed_types" value="pdf" checked>
+                        <span>PDF Files</span>
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 8px;">
+                        <input type="checkbox" name="allowed_types" value="doc" checked>
+                        <span>DOC Files</span>
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 8px;">
+                        <input type="checkbox" name="allowed_types" value="docx" checked>
+                        <span>DOCX Files</span>
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 8px;">
+                        <input type="checkbox" name="allowed_types" value="txt" checked>
+                        <span>TXT Files</span>
+                    </label>
+                </div>
+            </div>
+            <div style="margin-bottom: 20px;">
+                <label for="sessionTimeout" style="display: block; margin-bottom: 5px; font-weight: 600;">Session Timeout (hours)</label>
+                <input type="number" id="sessionTimeout" name="session_timeout" value="24" min="1" max="168" style="width: 100%; padding: 10px; border: 1px solid var(--glass-border); border-radius: 8px;">
+            </div>
+            <button type="submit" class="btn-admin btn-info">
+                <i class="fas fa-save"></i> Save Settings
+            </button>
+        </form>
+    </div>
+</div>
+
+<div class="admin-card">
+    <h3><i class="fas fa-database"></i> Database Management</h3>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
+        <div style="text-align: center; padding: 20px; background: rgba(23, 162, 184, 0.1); border-radius: 10px;">
+            <i class="fas fa-download" style="font-size: 2rem; color: var(--admin-info); margin-bottom: 10px;"></i>
+            <h4>Backup Data</h4>
+            <p style="color: var(--text-light); margin-bottom: 15px;">Create a backup of all system data</p>
+            <button onclick="backupData()" class="btn-admin btn-info">
+                <i class="fas fa-download"></i> Create Backup
+            </button>
+        </div>
+        <div style="text-align: center; padding: 20px; background: rgba(255, 193, 7, 0.1); border-radius: 10px;">
+            <i class="fas fa-upload" style="font-size: 2rem; color: var(--admin-warning); margin-bottom: 10px;"></i>
+            <h4>Restore Data</h4>
+            <p style="color: var(--text-light); margin-bottom: 15px;">Restore from a backup file</p>
+            <input type="file" id="restoreFile" accept=".json" style="display: none;" onchange="restoreData()">
+            <button onclick="document.getElementById('restoreFile').click()" class="btn-admin btn-warning">
+                <i class="fas fa-upload"></i> Restore Backup
+            </button>
+        </div>
+        <div style="text-align: center; padding: 20px; background: rgba(220, 53, 69, 0.1); border-radius: 10px;">
+            <i class="fas fa-trash" style="font-size: 2rem; color: var(--admin-danger); margin-bottom: 10px;"></i>
+            <h4>Clear Logs</h4>
+            <p style="color: var(--text-light); margin-bottom: 15px;">Clear all system logs</p>
+            <button onclick="clearLogs()" class="btn-admin btn-danger">
+                <i class="fas fa-trash"></i> Clear Logs
+            </button>
+        </div>
+        <div style="text-align: center; padding: 20px; background: rgba(40, 167, 69, 0.1); border-radius: 10px;">
+            <i class="fas fa-sync" style="font-size: 2rem; color: var(--admin-success); margin-bottom: 10px;"></i>
+            <h4>Rebuild Index</h4>
+            <p style="color: var(--text-light); margin-bottom: 15px;">Rebuild search indexes</p>
+            <button onclick="rebuildIndex()" class="btn-admin btn-success">
+                <i class="fas fa-sync"></i> Rebuild Index
+            </button>
+        </div>
+    </div>
+</div>
+
+<div class="admin-card">
+    <h3><i class="fas fa-info-circle"></i> System Information</h3>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
+        <div>
+            <h4>Application Info</h4>
+            <table style="width: 100%; border-collapse: collapse;">
+                <tr style="border-bottom: 1px solid var(--glass-border);">
+                    <td style="padding: 10px 0; font-weight: 600;">Version:</td>
+                    <td style="padding: 10px 0;">1.0.0</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--glass-border);">
+                    <td style="padding: 10px 0; font-weight: 600;">Python Version:</td>
+                    <td style="padding: 10px 0;">{{ python_version }}</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--glass-border);">
+                    <td style="padding: 10px 0; font-weight: 600;">Flask Version:</td>
+                    <td style="padding: 10px 0;">{{ flask_version }}</td>
+                </tr>
+                <tr>
+                    <td style="padding: 10px 0; font-weight: 600;">Uptime:</td>
+                    <td style="padding: 10px 0;">{{ uptime }}</td>
+                </tr>
+            </table>
+        </div>
+        <div>
+            <h4>Storage Info</h4>
+            <table style="width: 100%; border-collapse: collapse;">
+                <tr style="border-bottom: 1px solid var(--glass-border);">
+                    <td style="padding: 10px 0; font-weight: 600;">Total Users:</td>
+                    <td style="padding: 10px 0;">{{ storage_info.total_users }}</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--glass-border);">
+                    <td style="padding: 10px 0; font-weight: 600;">Total Resumes:</td>
+                    <td style="padding: 10px 0;">{{ storage_info.total_resumes }}</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--glass-border);">
+                    <td style="padding: 10px 0; font-weight: 600;">Total Jobs:</td>
+                    <td style="padding: 10px 0;">{{ storage_info.total_jobs }}</td>
+                </tr>
+                <tr>
+                    <td style="padding: 10px 0; font-weight: 600;">Storage Used:</td>
+                    <td style="padding: 10px 0;">{{ storage_info.storage_used }}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+document.getElementById('passwordForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const currentPassword = document.getElementById('currentPassword').value;
+    const newPassword = document.getElementById('newPassword').value;
+    const confirmPassword = document.getElementById('confirmPassword').value;
+    
+    if (newPassword !== confirmPassword) {
+        alert('New passwords do not match');
+        return;
+    }
+    
+    if (newPassword.length < 6) {
+        alert('New password must be at least 6 characters long');
+        return;
+    }
+    
+    fetch('/admin/settings/change-password', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            current_password: currentPassword,
+            new_password: newPassword
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('Password updated successfully');
+            document.getElementById('passwordForm').reset();
+        } else {
+            alert(data.error || 'Error updating password');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Error updating password');
+    });
+});
+
+document.getElementById('systemForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const formData = new FormData(this);
+    const settings = Object.fromEntries(formData.entries());
+    
+    // Handle checkbox array
+    const allowedTypes = Array.from(document.querySelectorAll('input[name="allowed_types"]:checked')).map(cb => cb.value);
+    settings.allowed_types = allowedTypes;
+    
+    fetch('/admin/settings/update-system', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(settings)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('System settings updated successfully');
+        } else {
+            alert(data.error || 'Error updating settings');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Error updating settings');
+    });
+});
+
+function backupData() {
+    if (confirm('Create a backup of all system data?')) {
+        window.location.href = '/admin/settings/backup';
+    }
+}
+
+function restoreData() {
+    const file = document.getElementById('restoreFile').files[0];
+    if (!file) return;
+    
+    if (confirm('This will replace all current data. Are you sure?')) {
+        const formData = new FormData();
+        formData.append('backup_file', file);
+        
+        fetch('/admin/settings/restore', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('Data restored successfully. Please refresh the page.');
+            } else {
+                alert(data.error || 'Error restoring data');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error restoring data');
+        });
+    }
+}
+
+function clearLogs() {
+    if (confirm('Clear all system logs? This action cannot be undone.')) {
+        fetch('/admin/settings/clear-logs', {
+            method: 'POST'
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('Logs cleared successfully');
+            } else {
+                alert(data.error || 'Error clearing logs');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error clearing logs');
+        });
+    }
+}
+
+function rebuildIndex() {
+    if (confirm('Rebuild search indexes? This may take a few minutes.')) {
+        fetch('/admin/settings/rebuild-index', {
+            method: 'POST'
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('Index rebuilt successfully');
+            } else {
+                alert(data.error || 'Error rebuilding index');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error rebuilding index');
+        });
+    }
+}
+</script>
+
+<style>
+@media (max-width: 768px) {
+    div[style*="grid-template-columns: 1fr 1fr"] {
+        grid-template-columns: 1fr !important;
+    }
+    
+    div[style*="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr))"] {
+        grid-template-columns: 1fr !important;
+    }
+}
+</style>
+{% endblock %}

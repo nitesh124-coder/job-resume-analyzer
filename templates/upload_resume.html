@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Resume - ResumeMatch</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <a href="/" class="navbar-brand">ResumeMatch</a>
+            <div class="navbar-links">
+                <a href="/jobs"><i class="fas fa-briefcase"></i> Browse Jobs</a>
+                <a href="/dashboard"><i class="fas fa-user-circle"></i> Dashboard</a>
+                <a href="/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="dashboard-header">
+        <div class="container">
+            <h1>Upload Your Resume</h1>
+        </div>
+    </div>
+
+    <div class="container">
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div class="flash-messages">
+                    {% for message in messages %}
+                        <p>{{ message }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        <div class="card animate-fade">
+            <div class="card-body">
+                <form action="/upload_resume" method="post" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label for="resume_name" class="form-label">Resume Name</label>
+                        <input type="text" id="resume_name" name="resume_name" class="form-control" placeholder="E.g., Software Engineer Resume" required>
+                        <small style="color: var(--text-light);">Give your resume a descriptive name for easier identification.</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="resume" class="form-label">Select Resume File</label>
+                        <div class="file-upload-wrapper">
+                            <label for="resume" class="file-upload-label">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                                <span id="file-name">Choose a file</span>
+                            </label>
+                            <input type="file" id="resume" name="resume" class="file-upload-input" accept=".pdf,.doc,.docx,.txt" required style="display: none;">
+                        </div>
+                        <small style="color: var(--text-light);">Accepted file formats: PDF, DOC, DOCX, TXT</small>
+                    </div>
+                    
+                    <div class="form-actions" style="display: flex; gap: 15px;">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-upload"></i> Upload Resume
+                        </button>
+                        <a href="/dashboard" class="btn btn-outline">
+                            <i class="fas fa-arrow-left"></i> Back to Dashboard
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="card animate-fade" style="margin-top: 30px;">
+            <div class="card-header">
+                <h2><i class="fas fa-info-circle"></i> Tips for Better Matching</h2>
+            </div>
+            <div class="card-body">
+                <ul style="list-style-type: none; padding: 0;">
+                    <li style="margin-bottom: 15px;">
+                        <i class="fas fa-check-circle" style="color: var(--primary-color); margin-right: 10px;"></i>
+                        <strong>Use a clean, well-formatted resume</strong> without complex tables or graphics.
+                    </li>
+                    <li style="margin-bottom: 15px;">
+                        <i class="fas fa-check-circle" style="color: var(--primary-color); margin-right: 10px;"></i>
+                        <strong>Include relevant keywords</strong> that match the job descriptions you're interested in.
+                    </li>
+                    <li style="margin-bottom: 15px;">
+                        <i class="fas fa-check-circle" style="color: var(--primary-color); margin-right: 10px;"></i>
+                        <strong>Make sure your skills section</strong> clearly lists technologies and tools you're familiar with.
+                    </li>
+                    <li>
+                        <i class="fas fa-check-circle" style="color: var(--primary-color); margin-right: 10px;"></i>
+                        <strong>Quantify your achievements</strong> with numbers and metrics whenever possible.
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 ResumeMatch. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const fileInput = document.getElementById('resume');
+            const fileNameSpan = document.getElementById('file-name');
+            
+            fileInput.addEventListener('change', function() {
+                if (this.files && this.files.length > 0) {
+                    fileNameSpan.textContent = this.files[0].name;
+                } else {
+                    fileNameSpan.textContent = 'Choose a file';
+                }
+            });
+        });
+    </script>
+
+    <style>
+        .file-upload-wrapper {
+            position: relative;
+            margin-bottom: 10px;
+        }
+        
+        .file-upload-label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 15px;
+            background-color: #f5f7fb;
+            border: 1px dashed var(--primary-color);
+            border-radius: 4px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .file-upload-label:hover {
+            background-color: rgba(58, 108, 244, 0.05);
+        }
+        
+        .file-upload-label i {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+        }
+    </style>
+</body>
+</html> 

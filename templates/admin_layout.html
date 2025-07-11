@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Admin Panel{% endblock %} - ResumeMatch</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Enhanced Admin-specific styles */
+        :root {
+            --admin-primary: #e53e3e;
+            --admin-primary-light: #fc8181;
+            --admin-primary-dark: #c53030;
+            --admin-secondary: #718096;
+            --admin-success: #38a169;
+            --admin-warning: #d69e2e;
+            --admin-danger: #e53e3e;
+            --admin-info: #3182ce;
+            --admin-purple: #805ad5;
+            --admin-teal: #319795;
+            --admin-orange: #dd6b20;
+            --admin-pink: #d53f8c;
+            --admin-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --admin-card-gradient: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+        }
+
+        .admin-navbar {
+            background: var(--admin-gradient);
+            color: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .admin-navbar .navbar-brand {
+            color: white !important;
+            font-weight: 700;
+        }
+
+        .admin-navbar .navbar-links a {
+            color: rgba(255, 255, 255, 0.9) !important;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 8px 16px;
+            margin: 0 5px;
+            transition: all 0.3s ease;
+        }
+
+        .admin-navbar .navbar-links a:hover {
+            background: rgba(255, 255, 255, 0.2);
+            color: white !important;
+            transform: translateY(-2px);
+        }
+
+        .admin-sidebar {
+            position: fixed;
+            left: 0;
+            top: 70px;
+            width: 250px;
+            height: calc(100vh - 70px);
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border-right: 1px solid var(--glass-border);
+            padding: 20px 0;
+            overflow-y: auto;
+            z-index: 1000;
+        }
+
+        .admin-content {
+            margin-left: 250px;
+            padding: 20px;
+            min-height: calc(100vh - 70px);
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sidebar-menu li {
+            margin: 5px 0;
+        }
+
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            color: var(--text-color);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+        }
+
+        .sidebar-menu a:hover,
+        .sidebar-menu a.active {
+            background: rgba(220, 53, 69, 0.1);
+            border-left-color: var(--admin-primary);
+            color: var(--admin-primary);
+        }
+
+        .sidebar-menu i {
+            width: 20px;
+            margin-right: 12px;
+            text-align: center;
+        }
+
+        .admin-header {
+            background: var(--admin-gradient);
+            color: white;
+            padding: 40px 30px;
+            margin-bottom: 40px;
+            border-radius: 25px;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .admin-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(255,255,255,0.1) 0%, transparent 50%, rgba(255,255,255,0.1) 100%);
+            animation: shimmer 3s ease-in-out infinite;
+        }
+
+        @keyframes shimmer {
+            0%, 100% { transform: translateX(-100%); }
+            50% { transform: translateX(100%); }
+        }
+
+        .admin-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: var(--admin-card-gradient);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.2);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--admin-info), var(--admin-success), var(--admin-warning), var(--admin-primary));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+            border-color: rgba(255,255,255,0.3);
+        }
+
+        .stat-card:hover::before {
+            opacity: 1;
+        }
+
+        .stat-card i {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            padding: 20px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover i {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .stat-card.users i {
+            color: var(--admin-info);
+            background: linear-gradient(135deg, rgba(49, 130, 206, 0.2), rgba(49, 130, 206, 0.1));
+        }
+        .stat-card.resumes i {
+            color: var(--admin-success);
+            background: linear-gradient(135deg, rgba(56, 161, 105, 0.2), rgba(56, 161, 105, 0.1));
+        }
+        .stat-card.jobs i {
+            color: var(--admin-warning);
+            background: linear-gradient(135deg, rgba(214, 158, 46, 0.2), rgba(214, 158, 46, 0.1));
+        }
+        .stat-card.applications i {
+            color: var(--admin-primary);
+            background: linear-gradient(135deg, rgba(229, 62, 62, 0.2), rgba(229, 62, 62, 0.1));
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #1a202c;
+            margin-bottom: 8px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover .stat-number {
+            transform: scale(1.05);
+        }
+
+        .stat-label {
+            color: #4a5568;
+            font-size: 1rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        .admin-table {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: var(--box-shadow);
+            border: 1px solid var(--glass-border);
+        }
+
+        .admin-table table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .admin-table th {
+            background: rgba(220, 53, 69, 0.1);
+            color: var(--admin-primary);
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .admin-table td {
+            padding: 15px;
+            border-bottom: 1px solid var(--glass-border);
+            color: var(--text-color);
+        }
+
+        .admin-table tr:hover {
+            background: rgba(220, 53, 69, 0.05);
+        }
+
+        .btn-admin {
+            background: var(--admin-primary);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-admin:hover {
+            background: #c82333;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .btn-admin.btn-success {
+            background: var(--admin-success);
+        }
+
+        .btn-admin.btn-warning {
+            background: var(--admin-warning);
+            color: #333;
+        }
+
+        .btn-admin.btn-danger {
+            background: var(--admin-danger);
+        }
+
+        .btn-admin.btn-info {
+            background: var(--admin-info);
+        }
+
+        .admin-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--box-shadow);
+        }
+
+        .admin-card h3 {
+            color: var(--admin-primary);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .mobile-menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        @media (max-width: 768px) {
+            .admin-sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+            }
+
+            .admin-sidebar.active {
+                transform: translateX(0);
+            }
+
+            .admin-content {
+                margin-left: 0;
+            }
+
+            .mobile-menu-toggle {
+                display: block;
+            }
+
+            .admin-stats {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar admin-navbar">
+        <div class="container">
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <button class="mobile-menu-toggle" onclick="toggleSidebar()">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <a href="/admin/dashboard" class="navbar-brand">
+                    <i class="fas fa-shield-alt"></i> Admin Panel
+                </a>
+            </div>
+            <div class="navbar-links">
+                <a href="/"><i class="fas fa-home"></i> Main Site</a>
+                <a href="/admin/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="admin-sidebar" id="adminSidebar">
+        <ul class="sidebar-menu">
+            <li><a href="/admin/dashboard" class="{% if request.endpoint == 'admin_dashboard' %}active{% endif %}">
+                <i class="fas fa-tachometer-alt"></i> Dashboard
+            </a></li>
+            <li><a href="/admin/users" class="{% if request.endpoint == 'admin_users' %}active{% endif %}">
+                <i class="fas fa-users"></i> Manage Users
+            </a></li>
+            <li><a href="/admin/resumes" class="{% if request.endpoint == 'admin_resumes' %}active{% endif %}">
+                <i class="fas fa-file-alt"></i> Manage Resumes
+            </a></li>
+            <li><a href="/admin/jobs" class="{% if request.endpoint == 'admin_jobs' %}active{% endif %}">
+                <i class="fas fa-briefcase"></i> Manage Jobs
+            </a></li>
+            <li><a href="/admin/applications" class="{% if request.endpoint == 'admin_applications' %}active{% endif %}">
+                <i class="fas fa-paper-plane"></i> Applications
+            </a></li>
+            <li><a href="/admin/logs" class="{% if request.endpoint == 'admin_logs' %}active{% endif %}">
+                <i class="fas fa-list-alt"></i> Parser Logs
+            </a></li>
+            <li><a href="/admin/settings" class="{% if request.endpoint == 'admin_settings' %}active{% endif %}">
+                <i class="fas fa-cog"></i> Settings
+            </a></li>
+        </ul>
+    </div>
+
+    <div class="admin-content">
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div class="flash-messages">
+                    {% for message in messages %}
+                        <p>{{ message }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </div>
+
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('adminSidebar');
+            sidebar.classList.toggle('active');
+        }
+
+        // Close sidebar when clicking outside on mobile
+        document.addEventListener('click', (e) => {
+            const sidebar = document.getElementById('adminSidebar');
+            const toggle = document.querySelector('.mobile-menu-toggle');
+
+            if (window.innerWidth <= 768 &&
+                !sidebar.contains(e.target) &&
+                !toggle.contains(e.target)) {
+                sidebar.classList.remove('active');
+            }
+        });
+    </script>
+</body>
+</html>

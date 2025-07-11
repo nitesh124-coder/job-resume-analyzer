@@ -1,0 +1,222 @@
+[
+    {
+        "id": "technova-solutions-software-developer",
+        "company": "TechNova Solutions",
+        "title": "Software Developer",
+        "experience": "2-4 years",
+        "salary": "\u20b96-8 LPA",
+        "description": "A mid-sized IT firm specializing in web and mobile app development.",
+        "location": "Pune, Maharashtra",
+        "category": "IT Companies",
+        "date_posted": "2025-05-15"
+    },
+    {
+        "id": "codecraft-systems-backend-engineer",
+        "company": "CodeCraft Systems",
+        "title": "Backend Engineer (Python)",
+        "experience": "3+ years",
+        "salary": "\u20b910 LPA",
+        "description": "Focuses on scalable enterprise solutions and cloud architecture.",
+        "location": "Bengaluru, Karnataka",
+        "category": "IT Companies",
+        "date_posted": "2025-05-15"
+    },
+    {
+        "id": "hexabyte-technologies-frontend-developer",
+        "company": "HexaByte Technologies",
+        "title": "Front-End Developer",
+        "experience": "1-2 years",
+        "salary": "\u20b95.5 LPA",
+        "description": "Startup working on eCommerce UI/UX design.",
+        "location": "Hyderabad, Telangana",
+        "category": "IT Companies",
+        "date_posted": "2025-05-15"
+    },
+    {
+        "id": "algostack-fullstack-developer",
+        "company": "AlgoStack Pvt. Ltd.",
+        "title": "Full Stack Developer",
+        "experience": "4-6 years",
+        "salary": "\u20b912 LPA",
+        "description": "Develops SaaS products for logistics and supply chain.",
+        "location": "Noida, Uttar Pradesh",
+        "category": "IT Companies",
+        "date_posted": "2025-05-15"
+    },
+    {
+        "id": "cybernext-infotech-devops-engineer",
+        "company": "CyberNext Infotech",
+        "title": "DevOps Engineer",
+        "experience": "2-3 years",
+        "salary": "\u20b99 LPA",
+        "description": "IT infrastructure automation company with a global clientele.",
+        "location": "Chennai, Tamil Nadu",
+        "category": "IT Companies",
+        "date_posted": "2025-05-15"
+    },
+    {
+        "id": "globalsoft-inc-it-analyst",
+        "company": "GlobalSoft Inc.",
+        "title": "IT Analyst",
+        "experience": "1-2 years",
+        "salary": "\u20b97 LPA",
+        "description": "US-based multinational offering IT services across industries.",
+        "location": "Gurugram, Haryana",
+        "category": "MNCs",
+        "date_posted": "2025-05-15"
+    },
+    {
+        "id": "integra-corp-hr-business-partner",
+        "company": "Integra Corp",
+        "title": "HR Business Partner",
+        "experience": "5+ years",
+        "salary": "\u20b915 LPA",
+        "description": "Fortune 500 company in the engineering services domain.",
+        "location": "Mumbai, Maharashtra",
+        "category": "MNCs",
+        "date_posted": "2025-05-15"
+    },
+    {
+        "id": "omegatech-global-data-scientist",
+        "company": "OmegaTech Global",
+        "title": "Data Scientist",
+        "experience": "2-4 years",
+        "salary": "\u20b912-14 LPA",
+        "description": "International firm specializing in AI/ML solutions.",
+        "location": "Bengaluru, Karnataka",
+        "category": "MNCs",
+        "date_posted": "2025-05-15"
+    },
+    {
+        "id": "alpha-solutions-cloud-consultant",
+        "company": "Alpha Solutions Ltd.",
+        "title": "Cloud Consultant",
+        "experience": "3-5 years",
+        "salary": "\u20b913 LPA",
+        "description": "Swiss-based IT consulting firm with branches in India.",
+        "location": "Pune, Maharashtra",
+        "category": "MNCs",
+        "date_posted": "2025-05-15"
+    },
+    {
+        "id": "novamed-pharmaceuticals-business-analyst",
+        "company": "NovaMed Pharmaceuticals",
+        "title": "Business Analyst",
+        "experience": "2+ years",
+        "salary": "\u20b99 LPA",
+        "description": "Global pharma MNC expanding operations in India.",
+        "location": "Ahmedabad, Gujarat",
+        "category": "MNCs",
+        "date_posted": "2025-05-15"
+    },
+    {
+        "id": "retailmax-india-area-sales-manager",
+        "company": "RetailMax India",
+        "title": "Area Sales Manager",
+        "experience": "4-6 years",
+        "salary": "\u20b96-7 LPA + incentives",
+        "description": "FMCG distributor working across tier-2 cities in India.",
+        "location": "Jaipur, Rajasthan",
+        "category": "Sales Companies",
+        "date_posted": "2025-05-15"
+    },
+    {
+        "id": "smartgadgets-sales-executive",
+        "company": "SmartGadgets Pvt. Ltd.",
+        "title": "Sales Executive",
+        "experience": "1-2 years",
+        "salary": "\u20b93.6 LPA + commission",
+        "description": "Electronics company selling smart devices online and offline.",
+        "location": "Lucknow, Uttar Pradesh",
+        "category": "Sales Companies",
+        "date_posted": "2025-05-15"
+    },
+    {
+        "id": "autotrend-motors-car-sales-consultant",
+        "company": "AutoTrend Motors",
+        "title": "Car Sales Consultant",
+        "experience": "2-3 years",
+        "salary": "\u20b95 LPA + incentives",
+        "description": "Leading automobile dealer in North India.",
+        "location": "Delhi NCR",
+        "category": "Sales Companies",
+        "date_posted": "2025-05-15"
+    },
+    {
+        "id": "brixo-tiles-territory-sales-officer",
+        "company": "Brixo Tiles Ltd.",
+        "title": "Territory Sales Officer",
+        "experience": "3+ years",
+        "salary": "\u20b94.8 LPA",
+        "description": "Building material and construction product supplier.",
+        "location": "Indore, Madhya Pradesh",
+        "category": "Sales Companies",
+        "date_posted": "2025-05-15"
+    },
+    {
+        "id": "agrocare-channel-sales-manager",
+        "company": "AgroCare Pvt. Ltd.",
+        "title": "Channel Sales Manager",
+        "experience": "5 years",
+        "salary": "\u20b96.5 LPA + bonus",
+        "description": "Agricultural product distributor with a strong rural network.",
+        "location": "Nagpur, Maharashtra",
+        "category": "Sales Companies",
+        "date_posted": "2025-05-15"
+    },
+    {
+        "id": "adverto-media-digital-marketing-executive",
+        "company": "Adverto Media",
+        "title": "Digital Marketing Executive",
+        "experience": "1-2 years",
+        "salary": "\u20b94.5 LPA",
+        "description": "Digital marketing agency focusing on startups.",
+        "location": "Bengaluru, Karnataka",
+        "category": "Marketing Companies",
+        "date_posted": "2025-05-15"
+    },
+    {
+        "id": "brandhive-india-marketing-strategist",
+        "company": "BrandHive India",
+        "title": "Marketing Strategist",
+        "experience": "3-5 years",
+        "salary": "\u20b98 LPA",
+        "description": "Full-service branding and marketing company.",
+        "location": "Mumbai, Maharashtra",
+        "category": "Marketing Companies",
+        "date_posted": "2025-05-15"
+    },
+    {
+        "id": "clickreach-seo-specialist",
+        "company": "ClickReach Pvt. Ltd.",
+        "title": "SEO Specialist",
+        "experience": "2 years",
+        "salary": "\u20b94.2 LPA",
+        "description": "Focused on online visibility and search engine marketing.",
+        "location": "Chandigarh, Punjab",
+        "category": "Marketing Companies",
+        "date_posted": "2025-05-15"
+    },
+    {
+        "id": "trendbuzz-social-media-manager",
+        "company": "TrendBuzz Solutions",
+        "title": "Social Media Manager",
+        "experience": "3+ years",
+        "salary": "\u20b96.5 LPA",
+        "description": "Manages online campaigns for influencers and brands.",
+        "location": "Delhi",
+        "category": "Marketing Companies",
+        "date_posted": "2025-05-15"
+    },
+    {
+        "id": "promoedge-campaign-manager",
+        "company": "PromoEdge Communications",
+        "title": "Campaign Manager",
+        "experience": "4-6 years",
+        "salary": "\u20b99 LPA",
+        "description": "BTL marketing company working with event and brand launches.",
+        "location": "Kolkata, West Bengal",
+        "category": "Marketing Companies",
+        "date_posted": "2025-05-15"
+    }
+]

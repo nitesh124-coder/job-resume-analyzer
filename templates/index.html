@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ResumeMatch - Find Your Perfect Job Match</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <a href="/" class="navbar-brand">
+                <div class="logo">
+                    <i class="fas fa-file-alt"></i>
+                </div>
+                ResumeMatch
+            </a>
+            <div class="navbar-links">
+                {% if logged_in %}
+                    <a href="/dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+                    <a href="/jobs"><i class="fas fa-briefcase"></i> Jobs</a>
+                    <a href="/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                {% else %}
+                    <a href="/login"><i class="fas fa-sign-in-alt"></i> Login</a>
+                    <a href="/register"><i class="fas fa-user-plus"></i> Register</a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="container">
+            <h1>Find Your Perfect Job Match</h1>
+            <p>Upload your resume and let our AI-powered system match you with the most suitable job opportunities.</p>
+            {% if not logged_in %}
+                <a href="/register" class="btn btn-primary">Get Started</a>
+            {% else %}
+                <a href="/dashboard" class="btn btn-primary">Go to Dashboard</a>
+            {% endif %}
+        </div>
+    </section>
+
+    <section class="features">
+        <div class="container">
+            <h2>Why Choose ResumeMatch?</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <i class="fas fa-robot"></i>
+                    <h3>AI-Powered Matching</h3>
+                    <p>Our advanced algorithm analyzes your resume and matches it with the most relevant job opportunities.</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-bolt"></i>
+                    <h3>Quick Results</h3>
+                    <p>Get instant matches and recommendations based on your skills and experience.</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-chart-line"></i>
+                    <h3>Smart Analytics</h3>
+                    <p>View detailed insights about your job matches and improve your chances of getting hired.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 ResumeMatch. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <button class="theme-toggle" onclick="toggleTheme()" title="Toggle Dark Mode">
+        <i class="fas fa-moon"></i>
+    </button>
+
+    <script>
+        // Theme switching functionality with error handling
+        function toggleTheme() {
+            try {
+                const body = document.body;
+                const themeToggle = document.querySelector('.theme-toggle i');
+                
+                if (!body || !themeToggle) {
+                    console.error('Required elements not found');
+                    return;
+                }
+                
+                if (body.getAttribute('data-theme') === 'dark') {
+                    body.removeAttribute('data-theme');
+                    themeToggle.classList.remove('fa-sun');
+                    themeToggle.classList.add('fa-moon');
+                    localStorage.setItem('theme', 'light');
+                } else {
+                    body.setAttribute('data-theme', 'dark');
+                    themeToggle.classList.remove('fa-moon');
+                    themeToggle.classList.add('fa-sun');
+                    localStorage.setItem('theme', 'dark');
+                }
+            } catch (error) {
+                console.error('Error toggling theme:', error);
+            }
+        }
+
+        // Initialize theme and animations
+        document.addEventListener('DOMContentLoaded', () => {
+            try {
+                // Theme initialization
+                const savedTheme = localStorage.getItem('theme');
+                const themeToggle = document.querySelector('.theme-toggle i');
+                
+                if (savedTheme === 'dark' && themeToggle) {
+                    document.body.setAttribute('data-theme', 'dark');
+                    themeToggle.classList.replace('fa-moon', 'fa-sun');
+                }
+
+                // Animation initialization
+                const elements = document.querySelectorAll('.card, .feature-card, .job-card');
+                elements.forEach((el, index) => {
+                    if (el) {
+                        el.style.animationDelay = `${index * 0.1}s`;
+                        el.classList.add('animate-slide-in');
+                    }
+                });
+
+                // Navbar scroll effect
+                const navbar = document.querySelector('.navbar');
+                if (navbar) {
+                    window.addEventListener('scroll', () => {
+                        if (window.scrollY > 50) {
+                            navbar.classList.add('scrolled');
+                        } else {
+                            navbar.classList.remove('scrolled');
+                        }
+                    });
+                }
+            } catch (error) {
+                console.error('Error during initialization:', error);
+            }
+        });
+    </script>
+</body>
+</html> 

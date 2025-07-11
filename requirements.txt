@@ -1,0 +1,43 @@
+# ResumeMatch - AI-Powered Resume Analysis System
+# Requirements file with updated and compatible versions
+
+# Core Flask Framework
+Flask==2.3.3
+Werkzeug==2.3.7
+Flask-Login==0.6.3
+
+# Natural Language Processing & Machine Learning
+nltk==3.8.1
+scikit-learn==1.3.2
+numpy==1.24.4
+scipy==1.11.4
+
+# Document Processing Libraries
+PyPDF2==3.0.1
+python-docx==0.8.11
+pdfplumber==0.9.0
+
+# Web Framework Dependencies
+Jinja2==3.1.2
+MarkupSafe==2.1.3
+itsdangerous==2.1.2
+click==8.1.7
+
+# Utility Libraries
+python-dateutil==2.8.2
+requests==2.31.0
+urllib3==2.0.7
+
+# Data Processing
+pandas==2.1.4
+
+# Development & Testing (Optional)
+pytest==7.4.3
+pytest-flask==1.3.0
+pytest-cov==4.1.0
+
+# Security
+cryptography==41.0.8
+
+# Type Hints Support
+typing-extensions==4.8.0

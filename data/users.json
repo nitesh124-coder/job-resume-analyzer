@@ -1,0 +1,64 @@
+{
+    "GUPTA": {
+        "password": "scrypt:32768:8:1$APd8121OGyvWNDEm$c489e44f16a1ed71b0a93be8201a6823a14a288dd61e64cf1fddeaffb26947c6a826f4fd91145e6b4762e1e3c9f9676c5c7995264d1f27ce31906f7c1b2ffb20",
+        "resumes": []
+    },
+    "test": {
+        "password": "scrypt:32768:8:1$gcn4gzueqNCOyElf$8225e5266d1e12fbc8fde53599a762dcf65400880f937629a1dcdd2e019b0b7626753d971cf68ab15516a9b76b8b7532acce54f3080a8e9767ed6c549f287734",
+        "resumes": [
+            {
+                "name": "software ",
+                "filename": "rohitresume.pdf",
+                "path": "uploads\\test\\rohitresume.pdf",
+                "uploaded_at": "2025-05-15 23:32:42"
+            }
+        ]
+    },
+    "user": {
+        "password": "scrypt:32768:8:1$vogHraXhTVJNEO2F$d0f60b044710675285aaf4c74d628974e695c22f42162abc5fc089d19c52afecdc76a21c33b2a5a99d81c42e933fbd94012c253c780819522f50e66b8203aa77",
+        "resumes": [
+            {
+                "name": "software ",
+                "filename": "rohitresume.pdf",
+                "path": "uploads\\user\\rohitresume.pdf",
+                "uploaded_at": "2025-05-15 23:38:30"
+            }
+        ]
+    },
+    "thilak": {
+        "password": "scrypt:32768:8:1$PJDJlxOJsTYVkkvu$1b7a21f2cd5f8be1d2dd9d7e475fff772bf644b8932fe3a847dfa4bbeec6b3579379207925a62f3a1c24b686041b04d826a4316b55587ed533aeeb135abe7f95",
+        "resumes": [
+            {
+                "name": "software ",
+                "filename": "rohitresume.pdf",
+                "path": "uploads\\thilak\\rohitresume.pdf",
+                "uploaded_at": "2025-05-16 10:25:20"
+            }
+        ]
+    },
+    "Sample": {
+        "password": "scrypt:32768:8:1$1na8uZUtEPkOB5ip$24be920cb59405ed8d9e4bdf0c492a35ef8cd26d2bc24cb96c2609f7b1e56fab0ff3adb042a42bc43c89a658406272f0e7f387f7dcbba98d626ec196e808595d",
+        "resumes": [
+            {
+                "name": "Claude.pdf",
+                "filename": "Claude.pdf",
+                "path": "resumes\\Sample\\Claude.pdf",
+                "uploaded_at": "2025-05-30 09:01:10",
+                "file_size": 413827,
+                "file_type": "pdf"
+            },
+            {
+                "name": "Claude.pdf",
+                "filename": "Claude.pdf",
+                "path": "resumes\\Sample\\Claude.pdf",
+                "uploaded_at": "2025-06-01 10:46:26",
+                "file_size": 413827,
+                "file_type": "pdf"
+            }
+        ]
+    },
+    "Resume": {
+        "password": "scrypt:32768:8:1$HkbhrTCngfGUGJ6h$77727a95ef7233807a56b23c308686712a6305d14ef63d89a8df43aa781c83f927481d6b97d10c5a1289ae6ab3f3a3762e72c495cba35fc5547b591a5d3e7323",
+        "resumes": []
+    }
+}

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume Analysis Results - ResumeMatch</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .progress-bar {
+            background-color: #f5f7fb;
+            border-radius: 50px;
+            height: 20px;
+            margin-top: 8px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            background: linear-gradient(to right, #3a6cf4, #5e89fb);
+            height: 100%;
+            border-radius: 50px;
+            position: relative;
+            transition: width 1s ease-in-out;
+        }
+        
+        .match-percentage {
+            position: absolute;
+            right: 10px;
+            color: #fff;
+            font-weight: bold;
+            font-size: 0.8rem;
+            line-height: 20px;
+        }
+        
+        .chart-container {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .job-match-item {
+            margin-bottom: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            transition: transform 0.3s;
+        }
+        
+        .job-match-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .job-match-title {
+            margin: 0 0 10px 0;
+            font-size: 1.1rem;
+            color: var(--dark-color);
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <a href="/" class="navbar-brand">ResumeMatch</a>
+            <div class="navbar-links">
+                <a href="/jobs"><i class="fas fa-briefcase"></i> Browse Jobs</a>
+                <a href="/dashboard"><i class="fas fa-user-circle"></i> Dashboard</a>
+                <a href="/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="dashboard-header">
+        <div class="container">
+            <h1>Resume Analysis Results</h1>
+            <p>Analysis for: <strong>{{ resume_name }}</strong></p>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="card animate-fade">
+            <div class="card-header">
+                <h2><i class="fas fa-trophy"></i> Best Match</h2>
+            </div>
+            <div class="card-body">
+                <div class="job-match-item">
+                    <h3 class="job-match-title">{{ result.most_similar.job }}</h3>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: {{ result.most_similar.similarity * 100 }}%;">
+                            <span class="match-percentage">{{ (result.most_similar.similarity * 100) | round(1) }}%</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="text-align: center; margin-top: 30px;">
+                    <a href="/jobs" class="btn btn-primary"><i class="fas fa-search"></i> Find This Job</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="section" style="margin-top: 30px;">
+            <div class="card animate-fade">
+                <div class="card-header">
+                    <h2><i class="fas fa-chart-bar"></i> Top 5 Matches</h2>
+                </div>
+                <div class="card-body">
+                    <div class="chart-container">
+                        {% for job, similarity in result.top_five %}
+                            <div class="job-match-item">
+                                <h3 class="job-match-title">{{ job }}</h3>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: {{ similarity * 100 }}%;">
+                                        <span class="match-percentage">{{ (similarity * 100) | round(1) }}%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section" style="margin-top: 30px;">
+            <div class="card animate-fade">
+                <div class="card-header">
+                    <h2><i class="fas fa-lightbulb"></i> Recommendations</h2>
+                </div>
+                <div class="card-body">
+                    <p>Based on your resume analysis, here are some recommendations:</p>
+                    <ul style="list-style-type: none; padding: 0;">
+                        <li style="margin-bottom: 15px;">
+                            <i class="fas fa-check-circle" style="color: var(--primary-color); margin-right: 10px;"></i>
+                            <strong>Focus on jobs in the "{{ result.most_similar.job }}" category</strong> for the best match with your skills and experience.
+                        </li>
+                        <li style="margin-bottom: 15px;">
+                            <i class="fas fa-check-circle" style="color: var(--primary-color); margin-right: 10px;"></i>
+                            <strong>Consider adding relevant keywords</strong> to improve your match rate for similar positions.
+                        </li>
+                        <li style="margin-bottom: 15px;">
+                            <i class="fas fa-check-circle" style="color: var(--primary-color); margin-right: 10px;"></i>
+                            <strong>Browse recommended job listings</strong> in our jobs section based on your top matches.
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin: 30px 0;">
+            <a href="/dashboard" class="btn btn-outline"><i class="fas fa-arrow-left"></i> Back to Dashboard</a>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 ResumeMatch. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html> 

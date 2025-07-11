@@ -1,0 +1,305 @@
+{% extends "admin_layout.html" %}
+
+{% block title %}Manage Applications{% endblock %}
+
+{% block content %}
+<div class="admin-header">
+    <div class="container">
+        <h1><i class="fas fa-paper-plane"></i> Application Management</h1>
+        <p>View and manage job applications and their statuses</p>
+    </div>
+</div>
+
+<div class="admin-card">
+    <h3><i class="fas fa-chart-bar"></i> Application Statistics</h3>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 20px;">
+        <div style="text-align: center; padding: 20px; background: rgba(40, 167, 69, 0.1); border-radius: 10px;">
+            <div style="font-size: 2rem; font-weight: 700; color: var(--admin-success);">{{ stats.total_applications }}</div>
+            <div style="color: var(--text-light);">Total Applications</div>
+        </div>
+        <div style="text-align: center; padding: 20px; background: rgba(255, 193, 7, 0.1); border-radius: 10px;">
+            <div style="font-size: 2rem; font-weight: 700; color: var(--admin-warning);">{{ stats.pending_applications }}</div>
+            <div style="color: var(--text-light);">Pending Review</div>
+        </div>
+        <div style="text-align: center; padding: 20px; background: rgba(23, 162, 184, 0.1); border-radius: 10px;">
+            <div style="font-size: 2rem; font-weight: 700; color: var(--admin-info);">{{ stats.reviewed_applications }}</div>
+            <div style="color: var(--text-light);">Reviewed</div>
+        </div>
+        <div style="text-align: center; padding: 20px; background: rgba(220, 53, 69, 0.1); border-radius: 10px;">
+            <div style="font-size: 2rem; font-weight: 700; color: var(--admin-danger);">{{ stats.rejected_applications }}</div>
+            <div style="color: var(--text-light);">Rejected</div>
+        </div>
+    </div>
+</div>
+
+<div class="admin-card">
+    <h3><i class="fas fa-search"></i> Filter Applications</h3>
+    <div style="display: flex; gap: 15px; margin-bottom: 20px; flex-wrap: wrap;">
+        <select id="filterStatus" style="padding: 10px; border: 1px solid var(--glass-border); border-radius: 8px;">
+            <option value="">All Status</option>
+            <option value="pending">Pending</option>
+            <option value="reviewed">Reviewed</option>
+            <option value="accepted">Accepted</option>
+            <option value="rejected">Rejected</option>
+        </select>
+        <select id="filterJob" style="padding: 10px; border: 1px solid var(--glass-border); border-radius: 8px;">
+            <option value="">All Jobs</option>
+            {% for job in jobs %}
+            <option value="{{ job.id }}">{{ job.title }} - {{ job.company }}</option>
+            {% endfor %}
+        </select>
+        <input type="date" id="filterDate" style="padding: 10px; border: 1px solid var(--glass-border); border-radius: 8px;">
+    </div>
+</div>
+
+<div class="admin-card">
+    <h3><i class="fas fa-list"></i> All Applications</h3>
+    {% if applications %}
+    <div class="admin-table">
+        <table id="applicationsTable">
+            <thead>
+                <tr>
+                    <th>Applicant</th>
+                    <th>Job Applied</th>
+                    <th>Application Date</th>
+                    <th>Resume Match</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for application in applications %}
+                <tr data-status="{{ application.status }}">
+                    <td>
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <div style="width: 35px; height: 35px; border-radius: 50%; background: linear-gradient(135deg, var(--admin-primary), #c82333); display: flex; align-items: center; justify-content: center; color: white; font-weight: 600;">
+                                {{ application.applicant_name[0].upper() }}
+                            </div>
+                            <div>
+                                <div style="font-weight: 600; color: var(--text-color);">{{ application.applicant_name }}</div>
+                                <div style="font-size: 0.85rem; color: var(--text-light);">{{ application.applicant_email }}</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div>
+                            <div style="font-weight: 600; color: var(--text-color);">{{ application.job_title }}</div>
+                            <div style="font-size: 0.85rem; color: var(--text-light);">{{ application.company_name }}</div>
+                        </div>
+                    </td>
+                    <td>
+                        <div style="color: var(--text-color);">{{ application.application_date }}</div>
+                    </td>
+                    <td>
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <div style="width: 40px; height: 6px; background: #e0e0e0; border-radius: 3px; overflow: hidden;">
+                                <div style="width: {{ application.match_percentage }}%; height: 100%; background: {% if application.match_percentage >= 80 %}var(--admin-success){% elif application.match_percentage >= 60 %}var(--admin-warning){% else %}var(--admin-danger){% endif %};"></div>
+                            </div>
+                            <span style="font-size: 0.85rem; color: var(--text-color);">{{ application.match_percentage }}%</span>
+                        </div>
+                    </td>
+                    <td>
+                        <span class="badge" style="background: {% if application.status == 'accepted' %}var(--admin-success){% elif application.status == 'pending' %}var(--admin-warning){% elif application.status == 'reviewed' %}var(--admin-info){% else %}var(--admin-danger){% endif %}; color: white; padding: 6px 12px; border-radius: 15px; font-size: 0.8rem;">
+                            {{ application.status.title() }}
+                        </span>
+                    </td>
+                    <td>
+                        <div style="display: flex; gap: 5px; flex-wrap: wrap;">
+                            <button onclick="viewApplication('{{ application.id }}')" class="btn-admin btn-info" title="View Details">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <select onchange="updateStatus('{{ application.id }}', this.value)" style="padding: 4px 8px; border: 1px solid var(--glass-border); border-radius: 4px; font-size: 0.8rem;">
+                                <option value="">Change Status</option>
+                                <option value="pending" {% if application.status == 'pending' %}selected{% endif %}>Pending</option>
+                                <option value="reviewed" {% if application.status == 'reviewed' %}selected{% endif %}>Reviewed</option>
+                                <option value="accepted" {% if application.status == 'accepted' %}selected{% endif %}>Accepted</option>
+                                <option value="rejected" {% if application.status == 'rejected' %}selected{% endif %}>Rejected</option>
+                            </select>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div style="text-align: center; padding: 40px; color: var(--text-light);">
+        <i class="fas fa-inbox" style="font-size: 3rem; margin-bottom: 15px;"></i>
+        <h3>No Applications Yet</h3>
+        <p>Job applications will appear here when users start applying to jobs.</p>
+    </div>
+    {% endif %}
+</div>
+
+<!-- Application Details Modal -->
+<div class="modal fade" id="applicationModal" tabindex="-1" style="display: none;">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content" style="background: var(--glass-bg); backdrop-filter: blur(10px); border: 1px solid var(--glass-border); border-radius: 15px;">
+            <div class="modal-header" style="border-bottom: 1px solid var(--glass-border);">
+                <h5 class="modal-title">Application Details</h5>
+                <button type="button" class="btn-close" onclick="closeModal()" style="background: none; border: none; font-size: 1.5rem; cursor: pointer;">&times;</button>
+            </div>
+            <div class="modal-body" id="applicationModalContent">
+                <!-- Content will be loaded here -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Filter functionality
+document.getElementById('filterStatus').addEventListener('change', function() {
+    filterApplications();
+});
+
+document.getElementById('filterJob').addEventListener('change', function() {
+    filterApplications();
+});
+
+function filterApplications() {
+    const statusFilter = document.getElementById('filterStatus').value;
+    const jobFilter = document.getElementById('filterJob').value;
+    const rows = document.querySelectorAll('#applicationsTable tbody tr');
+    
+    rows.forEach(row => {
+        const status = row.dataset.status;
+        const jobMatch = !jobFilter || row.textContent.includes(jobFilter);
+        
+        const statusMatch = !statusFilter || status === statusFilter;
+        
+        if (statusMatch && jobMatch) {
+            row.style.display = '';
+        } else {
+            row.style.display = 'none';
+        }
+    });
+}
+
+function viewApplication(applicationId) {
+    fetch(`/admin/applications/${applicationId}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                const app = data.application;
+                document.getElementById('applicationModalContent').innerHTML = `
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                        <div>
+                            <h6>Applicant Information</h6>
+                            <p><strong>Name:</strong> ${app.applicant_name}</p>
+                            <p><strong>Email:</strong> ${app.applicant_email}</p>
+                            <p><strong>Application Date:</strong> ${app.application_date}</p>
+                            <p><strong>Resume Match:</strong> ${app.match_percentage}%</p>
+                        </div>
+                        <div>
+                            <h6>Job Information</h6>
+                            <p><strong>Position:</strong> ${app.job_title}</p>
+                            <p><strong>Company:</strong> ${app.company_name}</p>
+                            <p><strong>Status:</strong> ${app.status}</p>
+                        </div>
+                    </div>
+                    <div style="margin-top: 20px;">
+                        <h6>Cover Letter</h6>
+                        <p>${app.cover_letter || 'No cover letter provided'}</p>
+                    </div>
+                `;
+                document.getElementById('applicationModal').style.display = 'block';
+            } else {
+                alert(data.error || 'Error loading application details');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error loading application details');
+        });
+}
+
+function updateStatus(applicationId, newStatus) {
+    if (!newStatus) return;
+    
+    fetch(`/admin/applications/${applicationId}/status`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ status: newStatus })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            location.reload();
+        } else {
+            alert(data.error || 'Error updating status');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Error updating status');
+    });
+}
+
+function closeModal() {
+    document.getElementById('applicationModal').style.display = 'none';
+}
+
+// Close modal when clicking outside
+window.addEventListener('click', function(event) {
+    const modal = document.getElementById('applicationModal');
+    if (event.target === modal) {
+        closeModal();
+    }
+});
+</script>
+
+<style>
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-dialog {
+    max-width: 500px;
+    width: 90%;
+    margin: 0 auto;
+}
+
+.modal-lg {
+    max-width: 800px;
+}
+
+.modal-content {
+    padding: 0;
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+.modal-header, .modal-footer {
+    padding: 20px;
+}
+
+.modal-body {
+    padding: 20px;
+}
+
+@media (max-width: 768px) {
+    .admin-table {
+        overflow-x: auto;
+    }
+    
+    .admin-table table {
+        min-width: 900px;
+    }
+    
+    .modal-dialog {
+        width: 95%;
+    }
+}
+</style>
+{% endblock %}

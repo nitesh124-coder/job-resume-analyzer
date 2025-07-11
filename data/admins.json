@@ -1,0 +1,9 @@
+{
+    "admin": {
+        "password": "scrypt:32768:8:1$jt8KQx6m3kwMUiDC$b4ebc67c8cf6a26c399432405ae7b4390d53f978c4cb2ba377e419afb4876ee85cd429aa9807ceea86233b4b59836c2bfc462cc7da38f6f05cf5690816c01c61",
+        "email": "admin@resumematch.com",
+        "created_at": "2025-06-02 12:45:06",
+        "last_login": null,
+        "is_active": true
+    }
+}
